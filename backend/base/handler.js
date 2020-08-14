@@ -6,7 +6,6 @@ let dynamo = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = "ExampleTable";
 
 exports.saveHello = async (event) => {
-  console.log("hola");
   const name = event.queryStringParameters.name;
 
   const item = {
@@ -36,14 +35,16 @@ exports.getHello = async (event) => {
     if (item.date) {
       const d = new Date(item.date);
 
+      const message = `Was greeted on ${d.getDate()}/${
+        d.getMonth() + 1
+      }/${d.getFullYear()}`;
+
       return {
         statusCode: 200,
         headers: {
           "Access-Control-Allow-Origin": "*",
         },
-        body: `Was greeted on ${d.getDate()}/${
-          d.getMonth() + 1
-        }/${d.getFullYear()}`,
+        body: JSON.stringify(message),
       };
     }
   } catch (e) {
