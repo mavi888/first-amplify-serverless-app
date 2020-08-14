@@ -44,6 +44,7 @@ $ cp ../base/handler.js handler.js
 5. Deploy backend, do this from the backend directory
 
 ```
+$ cd ..
 $ sam deploy --guided
 ```
 
