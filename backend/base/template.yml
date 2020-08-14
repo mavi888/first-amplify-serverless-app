@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
+
+Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: dev
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
+  SaveHelloFunction:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Handler: handler.saveHello
+      Runtime: nodejs12.x
+      CodeUri: ./hello
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: ExampleTable
+      Events:
+        HelloAPI:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /hello
+            Method: POST
+
+  GetHelloFunction:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Handler: handler.getHello
+      Runtime: nodejs12.x
+      CodeUri: ./hello
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: ExampleTable
+      Events:
+        HelloAPI:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /hello
+            Method: GET
+
+  ExampleTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "name"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "name"
+          KeyType: "HASH"
+      BillingMode: "PAY_PER_REQUEST"
+      TableName: "ExampleTable"
+
+Outputs:
+  Region:
+    Description: "Region"
+    Value: !Ref AWS::Region
+
+  ApiId:
+    Description: "API ID"
+    Value: !Ref MyApi
+
+  ApiUrl:
+    Description: "API endpoint URL for Prod environment"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"
