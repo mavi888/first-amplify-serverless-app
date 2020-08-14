@@ -94,3 +94,20 @@ $ cp base/App.js src/App.js
 ```
 
 7. Ready to try :)
+
+## Deploy app to the cloud
+
+1. Open the Amplify console
+
+```
+$ amplify console
+```
+
+2. Put your project in github.
+
+3. Connect your Amplify project to the github project.
+   This is a mono repo, so you need to specify the folder as "client"
+
+4. When that is done, the project will start building and deploying the frontend in the cloud.
+
+5. You are ready :)

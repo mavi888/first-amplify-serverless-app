@@ -49,12 +49,14 @@ exports.getHello = async (event) => {
     }
   } catch (e) {
     console.log(e);
+
+    const message = "Nobody was greeted with that name";
     return {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
-      body: "Nobody was greeted with that name",
+      body: JSON.stringify(message),
     };
   }
 };
