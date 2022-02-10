@@ -1,0 +1,6 @@
+.vscode/
+backend/samconfig.toml
+client/package-lock.json
+client/yarn.lock
+client/yarn.lock
+diagrams/.DS_Store

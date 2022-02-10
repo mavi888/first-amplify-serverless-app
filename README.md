@@ -1,8 +1,26 @@
-# Follow this instructions to build your first serverless app with Amplify.
+# Your First Serverless Application
 
-This app contains a backend built with AWS SAM and a frontend that is using AWS Amplify.
+_Infrastructure as code framework used_: AWS SAM and AWS Amplify
+_AWS Services used_: AWS Lambda, AWS DynamoDB, AWS API Gateway, AWS Amplify
 
-This simple application comes with frontend and backend that says Hello and remembers everybody that it greets.
+## Summary of the demo
+
+In this demo you will see:
+
+- How to create a simple serverless backend application using AWS SAM
+- The backend application will have 2 lambda functions, one Api Gateway and a DynamoDB table
+- How to build a REACT Application and host it using AWS Amplify.
+- How to connect the backend with the frontend using AWS Amplify client libraries.
+
+## Architecture of the application
+
+This application will get the name of a User and save it in a table.
+The user can check if the system has his name registered by checking the table.
+
+All this is done with a React application hosted using AWS Amplify.
+The backend is an API Gateway to handle the client requests, a Lambda function to do the business logic and then a DynamoDB table to save all the names.
+
+![architecture](./diagrams/architecture.png)
 
 ## Prerequisites for building this solution
 
@@ -15,43 +33,40 @@ This simple application comes with frontend and backend that says Hello and reme
 
 ## Building the BACKEND
 
-1. Go to the backend directory
+Go to the backend directory
 
 ```
-$ npm init -y
+$ npm install
 ```
 
-2. Copy the file template.yml from base into your directory
+We will be using AWS SAM and make sure you are running the latest version - at the time of writing, this was 1.37.0 (sam --version).
+
+Deploy the project to the cloud:
 
 ```
-$ cp base/template.yml template.yml
+sam deploy -g # Guided deployments
 ```
 
-3. Create a hello directory in your project where your code will be.
+When asked about functions that may not have authorization defined, answer (y)es. The access to those functions will be open to anyone, so keep the app deployed only for the time you need this demo running.
+
+Next times, when you update the code, you can build and deploy with:
 
 ```
-$ mkdir hello
-$ cd hello
-$ npm init -y
+sam deploy
 ```
 
-4. Copy the handler.js file from base to this directory
+After deploying you will get an URL back, and you can use it to test the APIs with Curl or Postman
 
-```
-$ cp ../base/handler.js handler.js
-```
+To check if a name is in the database
 
-5. Deploy backend, do this from the backend directory
-
-```
-$ cd ..
-$ sam deploy --guided
+````
+curl https://<API>/hello?name=Marcia
 ```
 
-Put the right name to your application and accept all defaults
-Wait for it to deploy.
-
-6. Try it in POSTMAN, you will get an URL back
+To save a new name to the database
+```
+curl -X POST https://bqf9incy3e.execute-api.eu-west-1.amazonaws.com/dev/hello?name=Marcia
+````
 
 ## Building the FRONTEND
 
@@ -93,21 +108,40 @@ Modify the endpoint with the one you got from deploying the backend.
 $ cp base/App.js src/App.js
 ```
 
-7. Ready to try :)
+7. Ready to try locally :)
 
-## Deploy app to the cloud
+## Host the frontend app in the cloud
 
-1. Open the Amplify console
+1. Add manual hosting
 
 ```
-$ amplify console
+$ amplify init -y
+$ amplify add hosting
 ```
 
-2. Put your project in github.
+Choose Hosting with Amplify Console
+And then select Manual deployment - this means that you will need to republish every time there are changes.
 
-3. Connect your Amplify project to the github project.
-   This is a mono repo, so you need to specify the folder as "client"
+```
+$ amplify publish
+```
 
-4. When that is done, the project will start building and deploying the frontend in the cloud.
+If you want to you can add CI/CD with GitHub, for that you need to host this project in GitHub and then connect it to the Amplify console.
 
-5. You are ready :)
+## Clean up
+
+### Delete the backend
+
+```
+$ cd backend
+$ sam delete
+```
+
+Say yes to all the prompts. It will ask you if you want to delete all the S3 buckets and the Cloudformation Stack.
+
+### Delete the client
+
+```
+$ cd client
+$ amplify delete
+```

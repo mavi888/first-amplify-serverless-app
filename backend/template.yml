@@ -15,8 +15,10 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties:
       Handler: handler.saveHello
-      Runtime: nodejs12.x
-      CodeUri: ./hello
+      Runtime: nodejs14.x
+      Environment:
+          Variables:
+            TABLE_NAME: ExampleTable
       Policies:
         - DynamoDBCrudPolicy:
             TableName: ExampleTable
@@ -32,8 +34,10 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties:
       Handler: handler.getHello
-      Runtime: nodejs12.x
-      CodeUri: ./hello
+      Runtime: nodejs14.x
+      Environment:
+          Variables:
+            TABLE_NAME: ExampleTable
       Policies:
         - DynamoDBCrudPolicy:
             TableName: ExampleTable
@@ -44,6 +48,8 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /hello
             Method: GET
+
+
 
   ExampleTable:
     Type: "AWS::DynamoDB::Table"
@@ -58,14 +64,6 @@ Resources:
       TableName: "ExampleTable"
 
 Outputs:
-  Region:
-    Description: "Region"
-    Value: !Ref AWS::Region
-
-  ApiId:
-    Description: "API ID"
-    Value: !Ref MyApi
-
   ApiUrl:
     Description: "API endpoint URL for Prod environment"
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"

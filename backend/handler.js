@@ -3,7 +3,7 @@
 const AWS = require("aws-sdk");
 let dynamo = new AWS.DynamoDB.DocumentClient();
 
-const TABLE_NAME = "ExampleTable";
+const TABLE_NAME = process.env.TABLE_NAME;
 
 exports.saveHello = async (event) => {
   const name = event.queryStringParameters.name;
