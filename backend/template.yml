@@ -15,7 +15,7 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties:
       Handler: handler.saveHello
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       Environment:
           Variables:
             TABLE_NAME: ExampleTable
@@ -34,7 +34,7 @@ Resources:
     Type: "AWS::Serverless::Function"
     Properties:
       Handler: handler.getHello
-      Runtime: nodejs14.x
+      Runtime: nodejs16.x
       Environment:
           Variables:
             TABLE_NAME: ExampleTable
@@ -48,8 +48,6 @@ Resources:
             RestApiId: !Ref MyApi
             Path: /hello
             Method: GET
-
-
 
   ExampleTable:
     Type: "AWS::DynamoDB::Table"
@@ -65,5 +63,5 @@ Resources:
 
 Outputs:
   ApiUrl:
-    Description: "API endpoint URL for Prod environment"
+    Description: "API endpoint URL for dev environment"
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/dev/"

@@ -62,7 +62,6 @@ exports.getHello = async (event) => {
 };
 
 async function getItem(name) {
-  console.log("getItem");
 
   const params = {
     Key: {
